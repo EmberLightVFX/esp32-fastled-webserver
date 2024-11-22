@@ -1,3 +1,6 @@
+# Project related files
+src/web/secrets.h
+
 # PlatformIO
 .pio
 .vscode
