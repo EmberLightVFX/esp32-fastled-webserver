@@ -1,4 +1,4 @@
-# esp32-fastled-webserver
+# ESP32 FastLED Web Server
 
 Control LEDs through a webserver on your ESP32
 
