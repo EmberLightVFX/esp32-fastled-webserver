@@ -51,26 +51,14 @@ void ledSetup()
         .setDither(true);
     FastLED.setMaxPowerInVoltsAndMilliamps(5, MILLI_AMPS); // 1A
     FastLED.setBrightness(brightness);
-
-    if (randomPattern == 1)
-    {
-        currentPatternIndex = rand() % patternCount;
-    }
-    if (randomPalette == 1)
-    {
-        currentPaletteIndex = rand() % paletteCount;
-    }
-    Serial.print("Current Pattern Index: ");
-    Serial.println(currentPatternIndex);
-    Serial.print("Current Palette Index: ");
-    Serial.println(currentPaletteIndex);
+    fill_solid(leds, NUM_LEDS, CRGB::Black);
 }
 
 void nextPattern()
 {
     if (randomPattern == 1)
     {
-        currentPatternIndex = random8(0, patternCount) % patternCount;
+        currentPatternIndex = random(0, patternCount) % patternCount;
     }
     else
     {
@@ -82,7 +70,7 @@ void nextPalette()
 {
     if (randomPalette == 1)
     {
-        currentPaletteIndex = random8(0, paletteCount) % paletteCount;
+        currentPaletteIndex = random(0, paletteCount) % paletteCount;
     }
     else
     {
