@@ -9,25 +9,27 @@
 #define NUM_LEDS 52
 CRGB leds[NUM_LEDS];
 
-#define MILLI_AMPS 1000 // IMPORTANT: set the max milli-Amps of your power supply (4A = 4000mA)
+#define MILLI_AMPS 1500 // IMPORTANT: set the max milli-Amps of your power supply (4A = 4000mA)
 #define FRAMES_PER_SECOND 120
 
 CRGB solidColor = CRGB::Blue;
 
+uint8_t randomPattern = 1;
+uint8_t randomPalette = 1;
 uint8_t power = 1;
 uint8_t speed = 30;
-uint8_t brightness = 8;
+uint8_t brightness = 100;
 uint8_t gHue = 0; // rotating "base color" used by many of the patterns
 
 uint8_t currentPatternIndex = 0;
 uint8_t currentPaletteIndex = 0;
 
 uint8_t autoplay = 1;
-uint8_t autoplayDuration = 20;
+uint8_t autoplayDuration = 50;
 unsigned long autoPlayTimeout = 0;
 
 uint8_t cyclePalettes = 1;
-uint8_t paletteDuration = 6;
+uint8_t paletteDuration = 12;
 unsigned long paletteTimeout = 0;
 
 // COOLING: How much does the air cool as it rises?
@@ -49,17 +51,39 @@ void ledSetup()
         .setDither(true);
     FastLED.setMaxPowerInVoltsAndMilliamps(5, MILLI_AMPS); // 1A
     FastLED.setBrightness(brightness);
+
+    if (randomPattern == 1)
+    {
+        currentPatternIndex = random8(0, patternCount) % patternCount;
+    }
+    if (randomPalette == 1)
+    {
+        currentPaletteIndex = random8(0, paletteCount) % paletteCount;
+    }
 }
 
 void nextPattern()
 {
-    // add one to the current pattern number, and wrap around at the end
-    currentPatternIndex = (currentPatternIndex + 1) % patternCount;
+    if (randomPattern == 1)
+    {
+        currentPatternIndex = random8(0, patternCount) % patternCount;
+    }
+    else
+    {
+        currentPatternIndex = (currentPatternIndex + 1) % patternCount;
+    }
 }
 
 void nextPalette()
 {
-    currentPaletteIndex = (currentPaletteIndex + 1) % paletteCount;
+    if (randomPalette == 1)
+    {
+        currentPaletteIndex = random8(0, paletteCount) % paletteCount;
+    }
+    else
+    {
+        currentPaletteIndex = (currentPaletteIndex + 1) % paletteCount;
+    }
     targetPalette = palettes[currentPaletteIndex];
 }
 

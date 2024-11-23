@@ -51,6 +51,18 @@ String getPattern()
   return String(currentPatternIndex);
 }
 
+String getRandomPattern()
+{
+  return String(randomPattern);
+}
+
+String setRandomPattern(String value)
+{
+  randomPattern = value.toInt();
+  randomPattern = randomPattern == 0 ? 0 : 1;
+  return String(randomPattern);
+}
+
 void setPattern(uint8_t value)
 {
   if (value >= patternCount)
@@ -77,6 +89,18 @@ String getPatterns()
   }
 
   return json;
+}
+
+String getRandomPalette()
+{
+  return String(randomPalette);
+}
+
+String setRandomPalette(String value)
+{
+  randomPalette = value.toInt();
+  randomPalette = randomPalette == 0 ? 0 : 1;
+  return String(randomPalette);
 }
 
 String getPalette()
@@ -300,11 +324,13 @@ FieldList fields = {
 
     {"patternSection", "Pattern", SectionFieldType, 0, 0, NULL, NULL, NULL},
     {"pattern", "Pattern", SelectFieldType, 0, patternCount, getPattern, getPatterns, setPattern},
+    {"randomPattern", "Random Patterns", BooleanFieldType, 0, 1, getRandomPattern, NULL, setRandomPattern},
     {"autoplay", "Cycle Patterns", BooleanFieldType, 0, 1, getAutoplay, NULL, setAutoplay},
     {"autoplayDuration", "Pattern Duration", NumberFieldType, 1, 255, getAutoplayDuration, NULL, setAutoplayDuration},
 
     {"paletteSection", "Palette", SectionFieldType, 0, 0, NULL, NULL, NULL},
     {"palette", "Palette", SelectFieldType, 0, paletteCount, getPalette, getPalettes, setPalette},
+    {"randomPalette", "Random Palettes", BooleanFieldType, 0, 1, getRandomPalette, NULL, setRandomPalette},
     {"cyclePalettes", "Cycle Palettes", BooleanFieldType, 0, 1, getCyclePalettes, NULL, setCyclePalettes},
     {"paletteDuration", "Palette Duration", NumberFieldType, 1, 255, getPaletteDuration, NULL, setPaletteDuration},
 
