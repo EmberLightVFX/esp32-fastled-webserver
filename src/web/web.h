@@ -34,6 +34,9 @@
 #include "led/fields.h"
 
 const int led = 5;
+bool connect_to_wifi = true;
+unsigned long startWifiAttemptTime = 5000;
+unsigned long wifiAttemptLength = 60000;
 
 void initNetwork(bool ap_only = true)
 {
@@ -42,26 +45,6 @@ void initNetwork(bool ap_only = true)
 
   WiFi.mode(WIFI_AP_STA);
   WiFi.begin(wifi_ssid, wifi_password);
-
-  unsigned long startAttemptTime = millis(); // Record the start time
-
-  Serial.println("Connecting to WiFi...");
-  while (WiFi.status() != WL_CONNECTED)
-  {
-    if (millis() - startAttemptTime >= 5000)
-    { // Check if 5 seconds have elapsed
-      Serial.println("Failed to connect to WiFi. Continuing...");
-      // break; // Exit the loop
-      startAttemptTime = millis();
-    }
-    delay(100); // Wait 0.1 second
-  }
-  if (WiFi.status() == WL_CONNECTED)
-  {
-    Serial.println("Connected to WiFi network");
-    Serial.print("IP address: ");
-    Serial.println(WiFi.localIP());
-  }
 
   Serial.println("Starting AP...");
   if (!WiFi.softAP(ap_ssid, ap_password))
@@ -77,6 +60,10 @@ void initNetwork(bool ap_only = true)
 
   webServer.begin();
   Serial.println("HTTP server started");
+
+  // Set wifi-timeouts
+  startWifiAttemptTime = millis() + startWifiAttemptTime;
+  wifiAttemptLength = millis() + wifiAttemptLength;
 }
 
 void setupWeb()
@@ -170,8 +157,31 @@ void setupWeb()
         Serial.print(" ");
         Serial.print(request->url());
         Serial.print(" sent redirect to / \n"); });
+  Serial.println("Connecting to WiFi...");
 }
 
 void webLoop()
 {
+  if (connect_to_wifi == true)
+  {
+    if (WiFi.status() != WL_CONNECTED)
+    {
+      if (millis() - startWifiAttemptTime >= 5000)
+      { // Check if 5 seconds have elapsed
+        Serial.println("Failed to connect to WiFi. Continuing...");
+        startWifiAttemptTime = millis();
+      }
+    }
+    else
+    {
+      connect_to_wifi = false;
+      Serial.println("Connected to WiFi network");
+      Serial.print("IP address: ");
+      Serial.println(WiFi.localIP());
+    }
+    if (millis() >= wifiAttemptLength)
+    {
+      connect_to_wifi = false;
+    }
+  }
 }
