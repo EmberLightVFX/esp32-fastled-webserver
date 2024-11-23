@@ -35,6 +35,7 @@
 
 const int led = 5;
 bool connect_to_wifi = true;
+bool initializing_wifi = false;
 unsigned long startWifiAttemptTime = 5000;
 unsigned long wifiAttemptLength = 60000;
 
@@ -44,7 +45,6 @@ void initNetwork(bool ap_only = true)
   Serial.println("Starting AP (Access Point)");
 
   WiFi.mode(WIFI_AP_STA);
-  WiFi.begin(wifi_ssid, wifi_password);
 
   Serial.println("Starting AP...");
   if (!WiFi.softAP(ap_ssid, ap_password))
@@ -164,6 +164,13 @@ void webLoop()
 {
   if (connect_to_wifi == true)
   {
+
+    if (initializing_wifi == false && WiFi.status() == WL_DISCONNECTED)
+    {
+      initializing_wifi = true;
+      WiFi.begin(wifi_ssid, wifi_password);
+    }
+
     if (WiFi.status() != WL_CONNECTED)
     {
       if (millis() - startWifiAttemptTime >= 5000)
