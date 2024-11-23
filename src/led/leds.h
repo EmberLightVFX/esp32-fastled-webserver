@@ -54,12 +54,16 @@ void ledSetup()
 
     if (randomPattern == 1)
     {
-        currentPatternIndex = random8(0, patternCount) % patternCount;
+        currentPatternIndex = rand() % patternCount;
     }
     if (randomPalette == 1)
     {
-        currentPaletteIndex = random8(0, paletteCount) % paletteCount;
+        currentPaletteIndex = rand() % paletteCount;
     }
+    Serial.print("Current Pattern Index: ");
+    Serial.println(currentPatternIndex);
+    Serial.print("Current Palette Index: ");
+    Serial.println(currentPaletteIndex);
 }
 
 void nextPattern()
