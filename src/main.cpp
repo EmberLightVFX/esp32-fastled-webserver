@@ -48,7 +48,6 @@ void listDir(fs::FS &fs, const char *dirname, uint8_t levels)
 void setup()
 {
   Serial.begin(460800);
-  delay(300);
   // while (!Serial)
   //{
   //   ; // wait for serial port to connect. Needed for native USB port only
@@ -69,6 +68,9 @@ void setup()
 
   initNetwork();
   setupWeb();
+
+  // Create new random seed
+  randomSeed(esp_random());
 }
 
 void loop()
